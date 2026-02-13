@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Babe 💖</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  height:100vh;
+  background: radial-gradient(circle at top,#2b0a18,#000);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  color:white;
+}
+
+/* Floating Hearts */
+.bgHeart{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation:floatUp linear infinite;
+  opacity:0.5;
+}
+@keyframes floatUp{
+  to{ transform:translateY(-110vh); opacity:0; }
+}
+
+/* Buttons */
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:30px;
+  background:#ff2f92;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 0 15px #ff2f92;
+  transition:.3s;
+  margin-top:20px;
+}
+button:hover{ transform:scale(1.1); }
+
+/* Sections */
+.section{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  animation:fadeIn 1.2s ease;
+}
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+
+.typing{ font-size:28px; min-height:80px; }
+
+/* Slideshow */
+.slideshow img{
+  width:300px;
+  height:400px;
+  object-fit:cover;
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(255,47,146,.6);
+  transition:.2s;
+}
+.caption{ margin-top:15px; }
+
+/* Reasons */
+.reason{
+  opacity:0;
+  transform:translateY(20px);
+  transition:.3s;
+  margin-top:15px;
+  font-size:20px;
+}
+.reason.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Glow */
+@keyframes glow{
+  from{text-shadow:0 0 10px #ff4fa3;}
+  to{text-shadow:0 0 25px #ff9bd4;}
+}
+.glowText{ animation:glow 1.5s infinite alternate; }
+
+/* ECG */
+#ecg{ display:none; margin-top:20px; }
+#ecg polyline{
+  stroke-dasharray:500;
+  stroke-dashoffset:500;
+  animation:ecgMove 2s linear infinite;
+}
+@keyframes ecgMove{
+  to{ stroke-dashoffset:0; }
+}
+
+/* Proposal */
+.proposalText{
+  font-size:34px;
+  animation:glow 1.5s infinite alternate;
+}
+.noBtn{ position:absolute; }
+
+/* Ring */
+.ring{
+  font-size:80px;
+  margin-top:20px;
+  display:none;
+  animation:glow 1.5s infinite alternate;
+}
+
+/* Confetti */
+#confettiCanvas{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+/* Letter Box */
+.letterBox{
+  width:160px;
+  height:110px;
+  background:#ff4fa3;
+  border-radius:10px;
+  margin-top:30px;
+  cursor:pointer;
+  position:relative;
+  box-shadow:0 0 20px rgba(255,79,163,.8);
+  animation:glow 1.5s infinite alternate;
+}
+
+.letterBox::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#ff6fb5;
+  clip-path:polygon(0 0,100% 0,50% 55%);
+}
+
+.letter{
+  position:absolute;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%) translateY(100%);
+  width:260px;
+  background:white;
+  color:#ff2f92;
+  padding:20px;
+  border-radius:12px;
+  opacity:0;
+  transition:.8s;
+}
+.letter.show{
+  transform:translateX(-50%) translateY(-160px);
+  opacity:1;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background Music -->
+<audio id="bgMusic" src="love.mp3" preload="auto" loop></audio>
+
+<script>
+for(let i=0;i<25;i++){
+  let h=document.createElement("div");
+  h.className="bgHeart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(5+Math.random()*5)+"s";
+  document.body.appendChild(h);
+}
+</script>
+
+<!-- INTRO -->
+<div class="section" id="intro" style="display:flex;">
+  <div class="typing" id="typing"></div>
+  <button onclick="goToSlideshow()">Tap to begin ❤️</button>
+</div>
+
+<!-- SLIDESHOW -->
+<div class="section slideshow" id="slideshow">
+  <img id="slideImage" src="pic1.jpg">
+  <div class="caption" id="caption"></div>
+  <button onclick="goToLove()">Continue 💌</button>
+</div>
+
+<!-- LOVE -->
+<div class="section" id="loveSection">
+  <h2>Why I Love You 💖</h2>
+  <div id="reasonsContainer"></div>
+  <button onclick="goToMedical()">One More Thing 🩺</button>
+</div>
+
+<!-- MEDICAL -->
+<div class="section" id="medicalSection">
+  <h2>Write My Love Prescription 🩺</h2>
+  <div>
+    <span onclick="addItem('🩺')">🩺</span>
+    <span onclick="addItem('💊')">💊</span>
+    <span onclick="addItem('💉')">💉</span>
+    <span onclick="addItem('🫀')">🫀</span>
+    <span onclick="addItem('🧠')">🧠</span>
+    <span onclick="addItem('❤️')">❤️</span>
+  </div>
+  <div id="prescriptionItems"></div>
+  <h3 id="finalDiagnosis"></h3>
+
+  <svg id="ecg" width="300" height="100">
+    <polyline fill="none" stroke="#ff4fa3" stroke-width="3"
+      points="0,50 40,50 50,30 60,70 70,50 120,50 130,20 140,80 150,50 300,50"/>
+  </svg>
+
+  <h3 id="heartbeatText"></h3>
+  <button id="proposalBtn" style="display:none;" onclick="goToProposal()">Final Question 💍</button>
+</div>
+
+<!-- PROPOSAL -->
+<div class="section" id="proposalSection">
+  <h1 class="proposalText">Will You Be My Valentine? 💖</h1>
+
+  <div style="position:relative;margin-top:40px;">
+    <button onclick="sayYes()">YES 💘</button>
+    <button class="noBtn" onclick="moveNoButton()">NO 😅</button>
+  </div>
+
+  <h2 id="proposalResult"></h2>
+  <div class="ring" id="ring">💍</div>
+
+  <div class="letterBox" id="letterBox" onclick="openLetter()" style="display:none;">
+    <div class="letter" id="loveLetter">
+      <h3>My Love 💖</h3>
+      <p>
+        You are my happiness, my peace,  
+        and my forever 🌸<br><br>
+        No matter what happens in life,  
+        I choose you. Always ❤️
+      </p>
+    </div>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
+</div>
+
+<script>
+/* Navigation */
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.style.display="none");
+  document.getElementById(id).style.display="flex";
+}
+const goToSlideshow=()=>{showSection("slideshow");startSlideshow();}
+const goToLove=()=>{showSection("loveSection");showReasons();}
+const goToMedical=()=>showSection("medicalSection");
+const goToProposal=()=>showSection("proposalSection");
+
+/* Typing */
+const lines=["Hey Babe 💖","I made something for you...","Hope you love it 🥹"];
+let li=0,ci=0;
+function typeEffect(){
+  if(li<lines.length){
+    if(ci<lines[li].length){
+      typing.innerHTML+=lines[li][ci++];
+      setTimeout(typeEffect,60);
+    }else{
+      typing.innerHTML+="<br>";
+      li++;ci=0;
+      setTimeout(typeEffect,700);
+    }
+  }
+}
+typeEffect();
+
+/* Slideshow */
+const imgs=["pic1.jpg","pic2.jpg","pic3.jpg","pic4.jpg","pic5.jpg","pic6.jpg"];
+const caps=["My favorite smile 😍","My safe place 🥰","You + Me ❤️","Forever 💍","Always you 🌸","My world 💖"];
+let si=0;
+function startSlideshow(){
+  caption.innerText=caps[0];
+  setInterval(()=>{
+    si=(si+1)%imgs.length;
+    slideImage.style.opacity=0;
+    setTimeout(()=>{
+      slideImage.src=imgs[si];
+      caption.innerText=caps[si];
+      slideImage.style.opacity=1;
+    },500);
+  },3000);
+}
+
+/* Reasons */
+const reasons=["You understand me🥹","You support me🌻","You make me happy🥰","You are my soul🫂"];
+function showReasons(){
+  let i=0;
+  let int=setInterval(()=>{
+    if(i<reasons.length){
+      let d=document.createElement("div");
+      d.className="reason";
+      d.innerText=reasons[i++];
+      reasonsContainer.appendChild(d);
+      setTimeout(()=>d.classList.add("show"),100);
+    }else clearInterval(int);
+  },1500);
+}
+
+/* Medical */
+let count=0;
+function addItem(s){
+  if(count>=6)return;
+  prescriptionItems.innerHTML+=s+" ";
+  count++;
+  if(count===6){
+    finalDiagnosis.innerHTML="Diagnosis: Love 💖<br>Treatment: Forever 😌";
+    finalDiagnosis.classList.add("glowText");
+    ecg.style.display="block";
+    heartbeatText.innerText="💓 My heart beats for you";
+    proposalBtn.style.display="inline-block";
+  }
+}
+
+/* Proposal */
+function moveNoButton(){
+  let b=document.querySelector(".noBtn");
+  b.style.transform=`translate(${Math.random()*200-100}px,${Math.random()*200-100}px)`;
+}
+
+function sayYes(){
+  proposalResult.innerText="YAYYYY 😭💖";
+  ring.style.display="block";
+
+  const music=bgMusic;
+  music.volume=0;
+  music.play();
+  let v=0;
+  let fade=setInterval(()=>{
+    if(v<0.5){ v+=0.02; music.volume=v; }
+    else clearInterval(fade);
+  },200);
+
+  startConfetti();
+
+  setTimeout(()=>{
+    letterBox.style.display="block";
+  },2500);
+}
+
+function openLetter(){
+  loveLetter.classList.add("show");
+}
+
+/* Confetti */
+function startConfetti(){
+  const c=confettiCanvas,ctx=c.getContext("2d");
+  c.width=innerWidth;c.height=innerHeight;
+  let p=[];
+  for(let i=0;i<120;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*6+2});
+  setInterval(()=>{
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle="#ff4fa3";
+    p.forEach(o=>{
+      ctx.beginPath();
+      ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
+      ctx.fill();
+      o.y+=2;if(o.y>c.height)o.y=0;
+    });
+  },20);
+}
+</script>
+
+</body>
+</html>
+
